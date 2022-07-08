@@ -128,7 +128,7 @@ except ImportError:
 
     def logmsg(level, msg):
         syslog.syslog(level, 'sdr: %s: %s' %
-                      (threading.currentThread().getName(), msg))
+                      (threading.currentThread().name, msg))
 
     def logdbg(msg):
         logmsg(syslog.LOG_DEBUG, msg)
@@ -189,11 +189,11 @@ class AsyncReader(threading.Thread):
         self._fd = fd
         self._queue = queue
         self._running = False
-        self.setDaemon(True)
-        self.setName(label)
+        self.daemon = True
+        self.name = label
 
     def run(self):
-        logdbg("start async reader for %s" % self.getName())
+        logdbg("start async reader for %s" % self.name)
         self._running = True
         for line in iter(self._fd.readline, ''):
             if line:
